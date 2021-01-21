@@ -1,0 +1,8 @@
+Vue.js
+- Framework progressivo. focada na camada visual
+- br.vuejs.org
+
+REST
+- Requisições que retornam um AJAX
+
+
