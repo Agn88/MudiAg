@@ -1,5 +1,7 @@
 package br.com.alura.mvc.mudi;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -39,42 +39,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout(logout -> {
                     logout.logoutUrl("/logout")
                             .logoutSuccessUrl("/home");
-                });
+                }).csrf().disable();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        /*
-        UserDetails user =
-                User.builder()
-                        .username("gabi")
-                        .password(encoder.encode("5544690"))
-                        .roles("ADM")
-                        .build();
-        */
-
-        auth.jdbcAuthentication()
+        auth
+                .jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(encoder);
-        //.withUser(user);
-    }
 
-    /*
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("agnaldo")
-                        .password("5544690")
-                        .roles("ADM")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
+//		UserDetails user =
+//				 User.builder()
+//					.username("maria")
+//					.password(encoder.encode("maria"))
+//					.roles("ADM")
+//					.build();
     }
-    */
 
 }
